@@ -1,10 +1,16 @@
 package cl.fullstack.cursoandroid;
+
+import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
@@ -81,13 +87,13 @@ public class MainActivity extends ListActivity {
             /**
              * CRUD Operations
              * */
-            // Inserting Contacts
+            /*/ Inserting Contacts
             Log.d("Insert: ", "Inserting ..");
             db.addContact(new Contact("Ravi", "91"));
             db.addContact(new Contact("Srinivas", "99"));
             db.addContact(new Contact("Tommy", "95"));
             db.addContact(new Contact("Karthik", "93"));
-
+            */
             // Reading all contacts
             Log.d("Reading: ", "Reading all contacts..");
             contacts = db.getAllContacts();
@@ -136,5 +142,38 @@ public class MainActivity extends ListActivity {
 
         }
 
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.main, menu);
+        int currentAPIVersion = android.os.Build.VERSION.SDK_INT;
+
+        if (currentAPIVersion >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+
+            // RUN THE CODE SPECIFIC TO THE API LEVELS ABOVE HONEYCOMB (API 11+)
+            ActionBar actionBar = getActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+
+        switch (item.getItemId()) {
+            case R.id.menu_new:
+                // app icon in action bar clicked; go home
+                // app icon in action bar clicked; go home
+                Intent intent = new Intent(this, AddContact.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
